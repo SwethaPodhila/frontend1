@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 function Register() {
-  const [form, setForm] = useState({ email: "", password: "", phone: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "", phone: "" });
   const [otp, setOtp] = useState("");
   const [otpStep, setOtpStep] = useState(false);
   const [verifyEmail, setVerifyEmail] = useState("");
@@ -11,14 +11,22 @@ function Register() {
   // 🧾 Handle Registration
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    const { name, email, password, phone } = form;
+
+    // ✅ Simple frontend validations
+    if (name.length < 3) return alert("Name must be at least 3 characters");
+    if (!/^\S+@\S+\.\S+$/.test(email)) return alert("Invalid email format");
+    if (!/^[0-9]{10}$/.test(phone)) return alert("Enter a valid 10-digit phone number");
+    if (password.length < 6) return alert("Password must be at least 6 characters");
+
     try {
       const res = await axios.post("http://localhost:5000/user/register", form);
       alert(res.data.msg);
 
-
       if (res.data.success) {
-        setVerifyEmail(form.email); // store separately
-        setForm({ email: "", password: "", phone: "" }); // clear all
+        setVerifyEmail(form.email);
+        setForm({ name: "", email: "", password: "", phone: "" });
         setOtpStep(true);
       }
     } catch (err) {
@@ -31,7 +39,7 @@ function Register() {
     e.preventDefault();
     try {
       const res = await axios.post("http://localhost:5000/user/verify-otp", {
-        email: verifyEmail, // ✅ fixed line
+        email: verifyEmail,
         otp,
       });
       alert(res.data.msg);
@@ -56,27 +64,37 @@ function Register() {
         {!otpStep ? (
           <form onSubmit={handleRegister}>
             <input
+              type="text"
+              className="form-control mb-3"
+              placeholder="Full Name"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+            />
+            <input
               type="email"
               className="form-control mb-3"
               placeholder="Email"
+              value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
-            />
-            <input
-              type="password"
-              className="form-control mb-3"
-              placeholder="Password"
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
             />
             <input
               type="text"
               className="form-control mb-3"
               placeholder="Phone Number"
+              value={form.phone}
               onChange={(e) => setForm({ ...form, phone: e.target.value })}
+            />
+            <input
+              type="password"
+              className="form-control mb-3"
+              placeholder="Password"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
             />
             <button className="btn btn-success w-100">Register</button>
           </form>
         ) : (
-          /* 🟢 OTP Verification Step */
+          // 🟢 OTP Verification Step
           <form onSubmit={handleVerifyOtp}>
             <p className="text-muted mb-3">
               OTP has been sent to <strong>{verifyEmail}</strong>
@@ -85,7 +103,7 @@ function Register() {
               type="text"
               className="form-control mb-3"
               placeholder="Enter OTP"
-              value={otp}  // ✅ make it controlled
+              value={otp}
               onChange={(e) => setOtp(e.target.value)}
             />
             <button className="btn btn-success w-100">Verify OTP</button>
