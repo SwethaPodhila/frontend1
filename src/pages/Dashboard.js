@@ -39,7 +39,6 @@ function Dashboard() {
     }
   };
 
-
   const navigate = useNavigate();
   return (
     <>
