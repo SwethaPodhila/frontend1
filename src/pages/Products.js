@@ -127,6 +127,7 @@ function Products() {
         setDescription(product.description);
         setCategoryId(product.categoryId);
         setEditingId(product._id);
+        window.scrollTo({ top: 0, behavior: "smooth" }); 
     };
 
     // 🗑️ Delete product

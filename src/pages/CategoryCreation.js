@@ -93,7 +93,7 @@ function CategoryPage() {
     if (!window.confirm("Are you sure you want to delete this category?")) return;
 
     try {
-      const res = await axios.delete(`https://backend1-4va2.onrender.com/delete/${id}`, {
+      const res = await axios.delete(`https://backend1-4va2.onrender.com/categories/delete/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       alert(res.data.msg);
@@ -107,11 +107,12 @@ function CategoryPage() {
   const handleEdit = (cat) => {
     setName(cat.name);
     setEditingId(cat._id); // ✅ use _id instead of id
+    window.scrollTo({ top: 0, behavior: "smooth" }); 
   };
 
   return (
     <>
-    <Navbar />
+      <Navbar />
       <div className="container mt-5">
         <div className="card shadow-lg p-4 rounded-4 mb-4">
           <h3 className="text-center mb-3 text-primary fw-bold">
