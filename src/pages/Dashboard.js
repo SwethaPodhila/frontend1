@@ -19,7 +19,7 @@ function Dashboard() {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/categories/all");
+      const res = await axios.get("https://backend1-4va2.onrender.com/categories/all");
       console.log("Categories Response:", res.data);
       setCategories(res.data.categories || []);
     } catch (err) {
@@ -29,7 +29,7 @@ function Dashboard() {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/products/all");
+      const res = await axios.get("https://backend1-4va2.onrender.com/products/all");
       console.log("Products API Response:", res.data); // 🔍 check once
       const data = res.data.products || res.data || [];
       setProducts(Array.isArray(data) ? data : []);

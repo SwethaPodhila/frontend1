@@ -34,7 +34,7 @@ function CategoryPage() {
   const fetchCategories = async () => {
     if (!user) return;
     try {
-      const res = await axios.get(`http://localhost:5000/categories/user/${user.email}`, {
+      const res = await axios.get(`https://backend1-4va2.onrender.com/categories/user/${user.email}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       console.log("Categories fetched:", res.data.categories); // 👈 check this
@@ -59,7 +59,7 @@ function CategoryPage() {
       let res;
       if (editingId) {
         res = await axios.put(
-          `http://localhost:5000/categories/update/${editingId}`,
+          `https://backend1-4va2.onrender.com/categories/update/${editingId}`,
           formData,
           {
             headers: {
@@ -69,7 +69,7 @@ function CategoryPage() {
           }
         );
       } else {
-        res = await axios.post("http://localhost:5000/categories/add", formData, {
+        res = await axios.post("https://backend1-4va2.onrender.com/categories/add", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -93,7 +93,7 @@ function CategoryPage() {
     if (!window.confirm("Are you sure you want to delete this category?")) return;
 
     try {
-      const res = await axios.delete(`http://localhost:5000/categories/delete/${id}`, {
+      const res = await axios.delete(`https://backend1-4va2.onrender.com/delete/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       alert(res.data.msg);

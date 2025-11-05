@@ -9,7 +9,7 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/user/login", form);
+      const res = await axios.post("https://backend1-4va2.onrender.com/user/login", form);
      // alert(res.data.msg);
       if (res.data.token) {
         localStorage.setItem("token", res.data.token);

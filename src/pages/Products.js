@@ -40,7 +40,7 @@ function Products() {
     const fetchCategories = async () => {
         try {
             const res = await axios.get(
-                `http://localhost:5000/categories/user/${user.email}`,
+                `https://backend1-4va2.onrender.com/categories/user/${user.email}`,
                 {
                     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
                 }
@@ -55,7 +55,7 @@ function Products() {
     const fetchProducts = async () => {
         try {
             const res = await axios.get(
-                `http://localhost:5000/products/user/${user.email}`,
+                `https://backend1-4va2.onrender.com/products/user/${user.email}`,
                 {
                     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
                 }
@@ -88,7 +88,7 @@ function Products() {
             let res;
             if (editingId) {
                 res = await axios.put(
-                    `http://localhost:5000/products/update/${editingId}`,
+                    `https://backend1-4va2.onrender.com/products/update/${editingId}`,
                     formData,
                     {
                         headers: {
@@ -98,7 +98,7 @@ function Products() {
                     }
                 );
             } else {
-                res = await axios.post("http://localhost:5000/products/add", formData, {
+                res = await axios.post("https://backend1-4va2.onrender.com/products/add", formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -135,7 +135,7 @@ function Products() {
 
         try {
             const res = await axios.delete(
-                `http://localhost:5000/products/delete/${id}`,
+                `https://backend1-4va2.onrender.com/products/delete/${id}`,
                 {
                     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
                 }

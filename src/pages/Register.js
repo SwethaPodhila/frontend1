@@ -22,7 +22,7 @@ function Register() {
     if (password.length < 6) return alert("Password must be at least 6 characters");
 
     try {
-      const res = await axios.post("http://localhost:5000/user/register", form);
+      const res = await axios.post("https://backend1-4va2.onrender.com/user/register", form);
       alert(res.data.msg);
 
       if (res.data.success) {
@@ -39,7 +39,7 @@ function Register() {
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/user/verify-otp", {
+      const res = await axios.post("https://backend1-4va2.onrender.com/user/verify-otp", {
         email: verifyEmail,
         otp,
       });

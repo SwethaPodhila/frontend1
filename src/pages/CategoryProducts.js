@@ -13,11 +13,11 @@ function CategoryProducts() {
     const fetchProducts = async () => {
       try {
         // ✅ Fetch products of that category
-        const res = await axios.get(`http://localhost:5000/products/category/${id}`);
+        const res = await axios.get(`https://backend1-4va2.onrender.com/products/category/${id}`);
         setProducts(res.data);
 
         // ✅ Optional: Fetch category name for banner
-        const catRes = await axios.get(`http://localhost:5000/categories/${id}`);
+        const catRes = await axios.get(`https://backend1-4va2.onrender.com/categories/${id}`);
         setCategoryName(catRes.data.name);
       } catch (err) {
         console.error("Error fetching category products:", err);
