@@ -50,7 +50,7 @@ function Dashboard() {
           className="banner-section"
           style={{
             backgroundImage:
-              "url('https://img.freepik.com/premium-vector/super-market-promotional-banner-design_987701-5360.jpg?semt=ais_hybrid&w=740&q=80')",
+              "url('https://i.ibb.co/ks3HwDVy/Grocery-Store.png')",
           }}
         ></section>
       </div>
