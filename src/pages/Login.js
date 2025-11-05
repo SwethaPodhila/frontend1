@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom"; // ✅ import Link
+import "./Login.css";
 
 function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -20,8 +21,8 @@ function Login() {
   };
 
   return (
-    <div className="container mt-5 col-md-4">
-      <div className="card p-4 shadow-lg rounded-4">
+    <div className="login-bg">
+      <div className="login-card p-4 shadow-lg rounded-4">
         <h3 className="text-center mb-4">Login</h3>
         <form onSubmit={handleLogin}>
           <input

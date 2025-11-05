@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Category from "./pages/CategoryCreation";
 import Products from "./pages/Products";
+import CategoryProducts from "./pages/CategoryProducts";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         
         <Route path="/category" element={<Category />} />
+         <Route path="/category/:id" element={<CategoryProducts />} /> 
         <Route path="/products" element={<Products />} />
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>

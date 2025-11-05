@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import "./Register.css";
 
 function Register() {
   const [form, setForm] = useState({ name: "", email: "", password: "", phone: "" });
@@ -54,8 +55,8 @@ function Register() {
   };
 
   return (
-    <div className="container mt-5 col-md-4">
-      <div className="card p-4 shadow-lg rounded-4">
+    <div className="register-bg">
+      <div className="register-card p-4 shadow-lg rounded-4">
         <h3 className="text-center mb-4">
           {otpStep ? "OTP Verification" : "Register"}
         </h3>
@@ -91,22 +92,23 @@ function Register() {
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
             />
-            <button className="btn btn-success w-100">Register</button>
+            <button className="btn btn-primary w-100">Register</button>
           </form>
         ) : (
           // 🟢 OTP Verification Step
           <form onSubmit={handleVerifyOtp}>
             <p className="text-muted mb-3">
-              OTP has been sent to <strong>{verifyEmail}</strong>
+              Please enter OTP has been sent to <strong>{verifyEmail}</strong>
             </p>
             <input
               type="text"
               className="form-control mb-3"
+
               placeholder="Enter OTP"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
             />
-            <button className="btn btn-success w-100">Verify OTP</button>
+            <button className="btn btn-primary w-100">Verify OTP</button>
           </form>
         )}
 

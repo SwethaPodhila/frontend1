@@ -1,0 +1,55 @@
+/* 🌆 Background Image */
+.login-bg {
+    background: url("https://t3.ftcdn.net/jpg/08/50/99/74/360_F_850997411_WGthOpzKT78ngTEJq0eMhl5pqEzms1g1.jpg") no-repeat center center/cover;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 🌫️ Glassmorphism effect for the card */
+.login-card {
+    width: 380px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+/* 🎨 Input styling */
+.login-card .form-control {
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+}
+
+.login-card .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* ✨ Button hover effect */
+.btn-primary {
+    background-color: #0056b3;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #007bff;
+    transform: scale(1.03);
+}
+
+.banner-section {
+  width: 100%;
+  height: 300px;           /* adjust if you want taller banner */
+  background-size: cover;  /* make image cover entire area */
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 0;
+  padding: 0;
+  border-radius: 0 0 40px 40px;
+  display: block;
+}

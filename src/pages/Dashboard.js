@@ -4,11 +4,13 @@ import DashboardNavbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-
+import "./Login.css";
 
 function Dashboard() {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [priceFilter, setPriceFilter] = useState("");
 
   useEffect(() => {
     fetchCategories();
@@ -43,20 +45,16 @@ function Dashboard() {
     <>
       <DashboardNavbar />
 
-      {/* Banner */}
-      <section
-        className="banner-section text-center d-flex align-items-center justify-content-center text-white"
-        style={{
-          backgroundImage: "url('https://img.freepik.com/premium-vector/super-market-promotional-banner-design_987701-5360.jpg?semt=ais_hybrid&w=740&q=80')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          height: "300px",
-          borderRadius: "0 0 40px 40px",
-          position: "relative",
-        }}
-      >
+      <div className="w-100">
+        <section
+          className="banner-section"
+          style={{
+            backgroundImage:
+              "url('https://img.freepik.com/premium-vector/super-market-promotional-banner-design_987701-5360.jpg?semt=ais_hybrid&w=740&q=80')",
+          }}
+        ></section>
+      </div>
 
-      </section>
 
       <section className="container py-5">
         <div className="d-flex justify-content-between align-items-center mb-4">
@@ -78,16 +76,16 @@ function Dashboard() {
                 className="card border-0 shadow-lg rounded-4 overflow-hidden hover-card"
                 key={cat._id}
                 style={{
-                  minWidth: "220px",
+                  minWidth: "200px",
                   flex: "0 0 auto",
                   scrollSnapAlign: "start",
-                }}
+                }} onClick={() => navigate(`/category/${cat._id}`)}
               >
                 <img
                   src={cat.imageUrl}
                   alt={cat.name}
                   className="card-img-top"
-                  style={{ height: "160px", objectFit: "cover" }}
+                  style={{ height: "150px", objectFit: "cover" }}
                 />
                 <div className="card-body text-center">
                   <h5 className="fw-bold">{cat.name}</h5>
@@ -123,11 +121,9 @@ function Dashboard() {
         </style>
       </section>
 
-
-      {/* 🛒 Products Section */}
       <section className="container py-5">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-
+        {/* 🔹 Header Row */}
+        <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
           <h3 className="fw-bold text-primary mb-0">All Products</h3>
           <button
             className="btn btn-primary rounded-pill px-4"
@@ -137,44 +133,89 @@ function Dashboard() {
           </button>
         </div>
 
-        <div className="row">
-          {products.length === 0 ? (
-            <p className="text-center text-muted">No products available.</p>
-          ) : (
-            products.map((product) => (
-              <div className="col-md-3 mb-4" key={product._id}>
-                <div className="card border-0 shadow-lg rounded-4 overflow-hidden hover-card h-100">
-                  <img
-                    src={product.imageUrl}
-                    alt={product.name}
-                    className="card-img-top"
-                    style={{ height: "180px", objectFit: "cover" }}
-                  />
-                  <div className="card-body text-center">
-                    <h5 className="fw-bold text-dark">{product.name}</h5>
-                    <p className="text-muted small mb-1">{product.categoryName}</p>
-                    <p className="fw-semibold text-success mb-3">₹{product.price}</p>
+        {/* 🔍 Filters Row */}
+        <div className="d-flex align-items-center gap-3 mb-4 flex-wrap">
+          <input
+            type="text"
+            className="form-control rounded-pill px-3"
+            placeholder="Search by name or category..."
+            style={{ width: "250px" }}
+            onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+          />
 
-                    <div className="d-flex justify-content-center gap-3">
-                      <button
-                        className="btn btn-outline-success btn-sm rounded-pill px-3"
-                        onClick={() => alert("This funtionality not implemented yet...")}
-                      >
-                        Add to Cart
-                      </button>
-                      <button
-                        className="btn btn-outline-primary btn-sm rounded-pill px-3"
-                        onClick={() => alert("🔍This funtionality not implemented yet... ")}
-                      >
-                        View Product
-                      </button>
+          <select
+            className="form-select rounded-pill px-3"
+            style={{ width: "180px" }}
+            onChange={(e) => setPriceFilter(e.target.value)}
+          >
+            <option value="">All Prices</option>
+            <option value="100">Under ₹100</option>
+            <option value="200">Under ₹200</option>
+            <option value="300">Under ₹300</option>
+            <option value="400">Under ₹400</option>
+          </select>
+        </div>
+
+        {/* 🧠 Filtered Products Logic */}
+        {(() => {
+          const filtered = products.filter((product) => {
+            const matchesSearch =
+              product.name.toLowerCase().includes(searchTerm || "") ||
+              product.categoryName.toLowerCase().includes(searchTerm || "");
+            const matchesPrice =
+              !priceFilter || product.price <= Number(priceFilter);
+            return matchesSearch && matchesPrice;
+          });
+
+          return (
+            <div className="row">
+              {filtered.length === 0 ? (
+                <p className="text-center text-muted">No products found.</p>
+              ) : (
+                filtered.map((product) => (
+                  <div className="col-md-3 mb-4" key={product._id}>
+                    <div className="card border-0 shadow-sm rounded-4 overflow-hidden hover-card h-100">
+                      <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        className="card-img-top"
+                        style={{ height: "180px", objectFit: "cover" }}
+                      />
+                      <div className="card-body text-center">
+                        <h5 className="fw-bold text-dark">{product.name}</h5>
+                        <p className="text-muted small mb-1">
+                          {product.categoryName}
+                        </p>
+                        <p className="fw-semibold text-success mb-3">
+                          ₹{product.price}
+                        </p>
+
+                        <div className="d-flex justify-content-center gap-3">
+                          <button
+                            className="btn btn-outline-success btn-sm rounded-pill px-3"
+                            onClick={() =>
+                              alert("This functionality not implemented yet...")
+                            }
+                          >
+                            Cart
+                          </button>
+                          <button
+                            className="btn btn-outline-primary btn-sm rounded-pill px-3"
+                            onClick={() =>
+                              alert("🔍This functionality not implemented yet...")
+                            }
+                          >
+                            View
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
+                ))
+              )}
+            </div>
+          );
+        })()}
 
         <style>
           {`
@@ -184,10 +225,14 @@ function Dashboard() {
         transition: all 0.3s ease;
       }
 
-      .btn-outline-success:hover,
-      .btn-outline-primary:hover {
-        transform: scale(1.05);
-        transition: all 0.2s ease-in-out;
+      input.form-control, select.form-select {
+        border: 1px solid #dee2e6;
+        box-shadow: none;
+      }
+
+      input.form-control:focus, select.form-select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 4px rgba(0,123,255,0.25);
       }
     `}
         </style>
