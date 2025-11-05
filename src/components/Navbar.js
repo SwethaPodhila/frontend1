@@ -35,7 +35,7 @@ function DashboardNavbar() {
         <div className="container-fluid">
           {/* Left: Logo */}
           <a className="navbar-brand fw-bold text-primary fs-4" href="/">
-            🛒 MyShop
+            🛒GroceryMarket
           </a>
 
           {/* Right: User Dropdown */}

@@ -8,7 +8,7 @@ function Footer() {
         <div className="row text-center text-md-start">
           {/* 🏬 About Section */}
           <div className="col-md-4 mb-4">
-            <h5 className="fw-bold mb-3 text-uppercase">MyShop</h5>
+            <h5 className="fw-bold mb-3 text-uppercase">GroceryMarket</h5>
             <p className="text-light small">
               Your trusted platform to explore, buy, and manage all your favorite
               products with ease and style.
