@@ -11,10 +11,11 @@ function Dashboard() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [priceFilter, setPriceFilter] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     fetchCategories();
-    fetchProducts();
   }, []);
 
   const fetchCategories = async () => {
@@ -27,17 +28,44 @@ function Dashboard() {
     }
   };
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (pageNumber = 1) => {
     try {
-      const res = await axios.get("https://backend1-4va2.onrender.com/products/all");
-      console.log("Products API Response:", res.data); // 🔍 check once
-      const data = res.data.products || res.data || [];
-      setProducts(Array.isArray(data) ? data : []);
+      const res = await axios.get(
+        `https://backend1-4va2.onrender.com/products/all?page=${pageNumber}&limit=8`
+      );
+      const { products, totalPages } = res.data;
+      setProducts(products || []);
+      setTotalPages(totalPages || 1);
     } catch (err) {
       console.error("Error fetching products:", err);
-      setProducts([]); // to prevent crash
     }
   };
+
+  useEffect(() => {
+    fetchProducts(page);
+  }, [page]);
+
+  const handleDownloadCSV = () => {
+    const csvHeader = "Name,Category,Price,Image URL\n";
+    const csvRows = products
+      .map(
+        (p) =>
+          `"${p.name}","${p.categoryId?.name || p.categoryName || "-"}","${p.price}","${p.imageUrl}"`
+      )
+      .join("\n");
+
+    const blob = new Blob([csvHeader + csvRows], {
+      type: "text/csv;charset=utf-8;",
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "Product_List.csv";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
 
   const navigate = useNavigate();
   return (
@@ -132,27 +160,37 @@ function Dashboard() {
           </button>
         </div>
 
-        {/* 🔍 Filters Row */}
-        <div className="d-flex align-items-center gap-3 mb-4 flex-wrap">
-          <input
-            type="text"
-            className="form-control rounded-pill px-3"
-            placeholder="Search by name or category..."
-            style={{ width: "250px" }}
-            onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
-          />
+        <div className="d-flex justify-content-between align-items-center gap-3 mb-4 flex-wrap">
+          <div className="d-flex align-items-center gap-3 flex-wrap">
+            <input
+              type="text"
+              className="form-control rounded-pill px-3"
+              placeholder="Search by name or category..."
+              style={{ width: "250px" }}
+              onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+            />
 
-          <select
-            className="form-select rounded-pill px-3"
-            style={{ width: "180px" }}
-            onChange={(e) => setPriceFilter(e.target.value)}
+            <select
+              className="form-select rounded-pill px-3"
+              style={{ width: "200px" }}
+              onChange={(e) => setPriceFilter(e.target.value)}
+            >
+              <option value="">All Prices</option>
+              <option value="under100">Under ₹100</option>
+              <option value="100to200">₹100 - ₹200</option>
+              <option value="200to300">₹200 - ₹300</option>
+              <option value="300to400">₹300 - ₹400</option>
+              <option value="above400">Above ₹400</option>
+            </select>
+          </div>
+
+          {/* 🔹 Right side — Download CSV */}
+          <button
+            className="btn btn-outline-success rounded-pill px-4 d-flex align-items-center gap-2"
+            onClick={handleDownloadCSV}
           >
-            <option value="">All Prices</option>
-            <option value="100">Under ₹100</option>
-            <option value="200">Under ₹200</option>
-            <option value="300">Under ₹300</option>
-            <option value="400">Under ₹400</option>
-          </select>
+            <i className="bi bi-download"></i> Product List
+          </button>
         </div>
 
         {/* 🧠 Filtered Products Logic */}
@@ -161,10 +199,23 @@ function Dashboard() {
             const matchesSearch =
               product.name.toLowerCase().includes(searchTerm || "") ||
               product.categoryName.toLowerCase().includes(searchTerm || "");
-            const matchesPrice =
-              !priceFilter || product.price <= Number(priceFilter);
+
+            let matchesPrice = true;
+            if (priceFilter === "under100") {
+              matchesPrice = product.price < 100;
+            } else if (priceFilter === "100to200") {
+              matchesPrice = product.price >= 100 && product.price <= 200;
+            } else if (priceFilter === "200to300") {
+              matchesPrice = product.price >= 200 && product.price <= 300;
+            } else if (priceFilter === "300to400") {
+              matchesPrice = product.price >= 300 && product.price <= 400;
+            } else if (priceFilter === "above400") {
+              matchesPrice = product.price > 400;
+            }
+
             return matchesSearch && matchesPrice;
           });
+
 
           return (
             <div className="row">
@@ -212,7 +263,27 @@ function Dashboard() {
                   </div>
                 ))
               )}
+              {/* 🔹 Pagination Controls */}
+              <div className="d-flex justify-content-center mt-4">
+                <button
+                  className="btn btn-outline-primary mx-2"
+                  disabled={page === 1}
+                  onClick={() => setPage((prev) => prev - 1)}
+                >
+                  Prev
+                </button>
+                <span className="align-self-center">Page {page} of {totalPages}</span>
+                <button
+                  className="btn btn-outline-primary mx-2"
+                  disabled={page === totalPages}
+                  onClick={() => setPage((prev) => prev + 1)}
+                >
+                  Next
+                </button>
+              </div>
+
             </div>
+
           );
         })()}
 
@@ -236,7 +307,6 @@ function Dashboard() {
     `}
         </style>
       </section>
-
 
       <Footer />
 
